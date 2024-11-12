@@ -1,0 +1,74 @@
+{% extends "Kitchen_Staff/base.html" %}
+{% block body %}
+<div class="container">
+    <h2>Pending Orders</h2>
+    {% if pending_orders %}
+        <div class="row">
+            {% for order in pending_orders %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order ID: {{ order.id }}</h5>
+                            <p>Order Time: {{ order.order_time }}</p>
+                            <p>Status: {{ order.status }}</p>
+                            <ul class="list-group list-group-flush">
+                                {% for item in order.orderitem_set.all %}
+                                    <li class="list-group-item">{{ item.quantity }} x {{ item.MENU_ID.name }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% if order.status == 'Ordered' %}
+                                <form method="post" action="{% url 'accept_order' order.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Accept Order</button>
+                                </form>
+                            {% elif order.status == 'accepted' %}
+                                <!-- Button to trigger the modal -->
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#assignModal{{ order.id }}">
+                                    Assign Order
+                                </button>
+                                
+                                <!-- Modal for selecting delivery staff -->
+                                <div class="modal fade" id="assignModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel{{ order.id }}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="assignModalLabel{{ order.id }}">Assign Delivery Staff</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="post" action="{% url 'assign_order' order.id %}">
+                                                <div class="modal-body">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="staffSelect">Select Delivery Staff:</label>
+                                                        <select class="form-control" id="staffSelect" name="staff">
+                                                            {% for staff in delivery_staff %}
+                                                                <option value="{{ staff.id }}">{{ staff.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Assign</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No pending orders.</p>
+    {% endif %}
+</div>
+
+<!-- Include Bootstrap's JavaScript dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}

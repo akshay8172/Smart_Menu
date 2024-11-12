@@ -1,0 +1,99 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4 text-center">Admin Dashboard</h1>
+    <div class="row">
+        <!-- Manage Tables -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/table_image.jpg' %}" class="card-img-top" alt="Manage Tables">
+                <div class="card-body text-center">
+                    <br><h5 class="card-title">Manage Tables</h5>
+                    <p class="card-text">Add, edit, <br>and assign QR codes to tables.</p>
+                    <a href="{% url 'manage_tables' %}" class="btn btn-primary">Manage Tables</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Manage Users -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/chef.jpg' %}" class="card-img-top" alt="Manage Users">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Users</h5>
+                    <p class="card-text">Manage accounts, including chefs and delivery staff.</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'manage_chefs' %}" class="btn btn-primary">Kitchen Staffs</a>
+                        <a href="{% url 'manage_delivery_staffs' %}" class="btn btn-primary">Delivery Staffs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- Manage Menu Items -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/food.jpg' %}" class="card-img-top" alt="Manage Menu">
+                <div class="card-body text-center">
+                    <br><h5 class="card-title">Manage Menu Items</h5>
+                    <p class="card-text">Add, edit, and delete menu items and categories.</p>
+                    <a href="{% url 'manage_menu_items' %}" class="btn btn-primary">Manage Menus</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Manage Payments -->
+        {% comment %} <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/payment.jpg' %}" class="card-img-top" alt="Manage Payments">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Payments</h5>
+                    <p class="card-text">View and manage payments.</p>
+                    <a href="{% url 'manage_payments' %}" class="btn btn-primary">Go to Payments</a>
+                </div>
+            </div>
+        </div> {% endcomment %}
+        
+        <!-- View Ratings & Reviews -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/rating.jpg' %}" class="card-img-top" alt="View Ratings">
+                <div class="card-body text-center">
+                    <br><br><h5 class="card-title">View Ratings & Reviews</h5>
+                    <p class="card-text">View customer ratings and reviews.</p>
+                    <a href="{% url 'view_ratings_reviews' %}" class="btn btn-primary" style="margin-top: 7px;">View Reviews & Ratings</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Bills & Payments -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/payment.jpg' %}" class="card-img-top" alt="View Bills">
+                <div class="card-body text-center">
+                    <br><h5 class="card-title">View Bills & Payments</h5>
+                    <p class="card-text">View all bills and payments.</p>
+                    <a href="{% url 'view_bills_payments' %}" class="btn btn-primary">Bills & Payments</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Order Reports -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{% static 'images/orders.jpg' %}" class="card-img-top" alt="View Reports">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Order Reports</h5>
+                    <p class="card-text">View detailed order reports.</p>
+                    <a href="{% url 'view_order_reports' %}" class="btn btn-primary" style="margin-top: 10px;">View Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

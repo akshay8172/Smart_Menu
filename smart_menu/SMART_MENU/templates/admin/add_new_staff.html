@@ -1,0 +1,192 @@
+{% extends 'admin/base.html' %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    .error-message {
+        color: red;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+    }
+    .password-toggle {
+        position: relative;
+    }
+    .toggle-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Add New Staff</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST" action="{% url 'admin_add_new_delivery_staff' %}" enctype="multipart/form-data" id="staffForm">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="error-message" id="nameError"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
+                    <div class="error-message" id="dobError"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Image</label>
+                    <input type="file" class="form-control" id="image" name="image" required accept=".jpg,.jpeg,.png">
+                    <div class="error-message" id="imageError"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+
+                <div class="mb-3 password-toggle">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <span class="toggle-icon"><i class="fas fa-eye"></i></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Add Staff</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    const form = $('#staffForm');
+    const nameInput = $('#name');
+    const phoneInput = $('#phone');
+    const emailInput = $('#email');
+    const dobInput = $('#dob');
+    const imageInput = $('#image');
+
+    function showError(element, message) {
+        element.text(message).show();
+    }
+
+    function hideError(element) {
+        element.text('').hide();
+    }
+
+    // Name validation
+    nameInput.on('input', function() {
+        const nameError = $('#nameError');
+        if (!/^[A-Za-z\s]+$/.test($(this).val())) {
+            showError(nameError, 'Name should contain only letters and spaces.');
+        } else {
+            hideError(nameError);
+        }
+    });
+
+    // Phone validation
+    phoneInput.on('input', function() {
+        const phoneError = $('#phoneError');
+        if (!/^\d{10}$/.test($(this).val())) {
+            showError(phoneError, 'Phone number should be 10 digits.');
+        } else {
+            hideError(phoneError);
+        }
+    });
+
+    // Email validation
+    emailInput.on('input', function() {
+        const emailError = $('#emailError');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($(this).val())) {
+            showError(emailError, 'Please enter a valid email address.');
+        } else {
+            hideError(emailError);
+        }
+    });
+
+    // Date of Birth validation
+    dobInput.on('change', function() {
+        const dobError = $('#dobError');
+        const today = new Date();
+        const birthDate = new Date($(this).val());
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        if (age < 18) {
+            showError(dobError, 'Must be at least 18 years old.');
+        } else {
+            hideError(dobError);
+        }
+    });
+
+    // Image validation
+    imageInput.on('change', function() {
+        const imageError = $('#imageError');
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        
+        if (!allowedExtensions.exec($(this).val())) {
+            showError(imageError, 'Please upload only jpg, jpeg, or png images.');
+            $(this).val('');
+        } else {
+            hideError(imageError);
+        }
+    });
+
+    // Form submission
+    form.on('submit', function(e) {
+        if ($('.error-message:not(:empty)').length > 0) {
+            e.preventDefault();
+            alert('Please correct the errors before submitting.');
+        }
+    });
+
+    // Password visibility toggle
+    $('.toggle-icon').on('click', function() {
+        const passwordInput = $(this).prev('input');
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).html('<i class="fas fa-eye-slash"></i>');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).html('<i class="fas fa-eye"></i>');
+        }
+    });
+});
+</script>
+{% endblock %}

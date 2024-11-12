@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+{% block title %}Edit Offer{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Edit Offer</h2>
+
+    <form method="POST" action="{% url 'edit_offer' offer.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="product">Product:</label>
+            <select id="product" name="product" class="form-control" disabled>
+                {% for product in products %}
+                    <option value="{{ product.id }}" {% if product == offer.product %}selected{% endif %}>
+                        {{ product.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Product cannot be changed.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="discount_percentage">Discount Percentage:</label>
+            <input type="number" id="discount_percentage" name="discount_percentage" class="form-control" value="{{ offer.discount_percentage }}" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="offer_start">Offer Start:</label>
+            <input type="date" id="offer_start" name="offer_start" class="form-control" value="{{ offer.offer_start|date:'Y-m-d' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="offer_end">Offer End:</label>
+            <input type="date" id="offer_end" name="offer_end" class="form-control" value="{{ offer.offer_end|date:'Y-m-d' }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Offer</button>
+        <a href="{% url 'manage_offers' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock content %}

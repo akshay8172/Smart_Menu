@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #495057;
+        }
+
+        .order-summary {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            max-height: 200px; /* Set a height for the scrollable area */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-top: 20px; /* Add some space above the table */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h4 {
+                font-size: 20px;
+            }
+
+            .btn-primary {
+                width: 100%;
+                margin-top: 10px;
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Order Status</h2>
+
+        {% for order, items in order_items_list %}
+            <div class="order-summary mb-4">
+                <h4>Order ID: {{ order.id }}</h4>
+                <p style="color: white; background-color:black">Status: <strong>{{ order.status|capfirst }}</strong></p>
+                <p>Order Date: <strong>{{ order.order_time }}</strong></p>
+
+                <h5>Order Items</h5>
+                <div class="table-container">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Menu Item</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <td class="menu-item">
+                                        <img src="{{ item.MENU_ID.image.url }}" height="50" width="50" alt="{{ item.MENU_ID.name }}">
+                                        <span>{{ item.MENU_ID.name }}</span>
+                                    </td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>₹{{ item.price }}</td>
+                                    <td>{{ item.status }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No items in this order.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if order.status == 'delivered' %}
+                <div class="text-center">
+                    <form action="/user_pay_proceed/{{ order.id }}/{{ order.amount }}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No orders found for this table.</p>
+        {% endfor %}
+        
+        <div class="text-center">
+            <!-- <a href="#" class="btn btn-primary">Back to Menu</a> -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
+</html>

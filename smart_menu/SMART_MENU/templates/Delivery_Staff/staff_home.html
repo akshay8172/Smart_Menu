@@ -1,0 +1,58 @@
+{% extends "Delivery_Staff/base.html" %}
+{% block body %}
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Assigned Orders</h2>
+
+        <!-- Iterate over assigned orders and display them in card views -->
+        <div class="row">
+            {% for assign in assigned_orders %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Table Number: {{ assign.ORDER.TABLE.table_number }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Order ID: {{ assign.ORDER.id }}</h6>
+                        <!-- <h6>Amount: {{ assign.ORDER.amount }}</h6> -->
+                        <p>Status: <strong>{{ assign.ORDER.status }}</strong></p>
+                        <p>Order Time: <strong>{{ assign.ORDER.order_time }}</strong></p>
+
+                        <!-- Order Items -->
+                        <h6>Order Items:</h6>
+                        <ul class="list-group">
+                            {% for item in assign.ORDER.orderitem_set.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ item.MENU_ID.name }} 
+                                <span class="badge badge-primary badge-pill">{{ item.quantity }}</span>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No items in this order.</li>
+                            {% endfor %}
+                        </ul>
+
+                        <!-- Delivered button to update status -->
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="assign_id" value="{{ assign.id }}">
+                            <button type="submit" class="btn btn-success mt-3">Mark as Delivered</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No assigned orders at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
+
+
+
+{% endblock body %}

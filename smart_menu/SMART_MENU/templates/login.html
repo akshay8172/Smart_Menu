@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <!-- Login Container -->
+    <div class="login-container" style="display: flex; align-items: center; justify-content: center; height: 100vh; background-image: url('/static/login-bg.jpg'); background-size: cover; background-position: center;">
+        <div class="login-box" style="background-color: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px;">
+            <h2 class="login-title text-center" style="margin-bottom: 30px; font-size: 2rem; color: #007bff;">Login</h2>
+            <form method="POST" action="login">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username" style="font-size: 1.1rem; color: #333;">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required style="padding: 10px; border-radius: 5px; border: 1px solid #ced4da;">
+                </div>
+                <div class="form-group">
+                    <label for="password" style="font-size: 1.1rem; color: #333;">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required style="padding: 10px; border-radius: 5px; border: 1px solid #ced4da;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" name="submit" style="background-color: #007bff; border-color: #007bff; padding: 12px; font-size: 1.2rem; border-radius: 5px;">Login</button>
+            </form>
+            <p class="text-center mt-3" style="font-size: 1rem;">
+                <a href="#" style="color: #007bff;">Forgot password?</a>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

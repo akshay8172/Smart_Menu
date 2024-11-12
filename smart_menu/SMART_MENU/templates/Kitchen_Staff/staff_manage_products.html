@@ -1,0 +1,60 @@
+{% extends "Kitchen_Staff/base.html" %}
+{% block body %}
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Manage Menu Items</h2>
+
+        <!-- Display all the menu items -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in menu_items %}
+                <tr>
+                    <td><img src="{{ item.image.url }}" height="50" width="50" alt="{{ item.name }}"></td>
+                    <td>{{ item.name }}</td>
+                    <td>₹{{ item.price }}</td>
+                    <td>
+                        {% if item.is_available %}
+                            <span class="badge badge-success">Available</span>
+                        {% else %}
+                            <span class="badge badge-danger">Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- Form to toggle availability status -->
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ item.id }}">
+                            <button type="submit" class="btn btn-primary">
+                                {% if item.is_available %}
+                                    Make Unavailable
+                                {% else %}
+                                    Make Available
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No menu items available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock body %}

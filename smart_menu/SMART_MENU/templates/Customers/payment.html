@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #495057;
+        }
+
+        .order-summary {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            max-height: 200px; /* Set a height for the scrollable area */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-top: 20px; /* Add some space above the table */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h4 {
+                font-size: 20px;
+            }
+
+            .btn-primary {
+                width: 100%;
+                margin-top: 10px;
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Payment for Order ID: {{ order.id }}</h2>
+        {% comment %} <form id="payment-form" method="POST" action="{% url 'pay' order.id %}"> {% endcomment %}
+            {% csrf_token %}
+            <input type="hidden" name="amount" value="{{ order.total_amount }}">
+            <label for="payment_method">Payment Method:</label>
+            <select name="payment_method" id="payment_method">
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Net Banking">Net Banking</option>
+                <option value="UPI">UPI</option>
+            </select>
+            <button type="submit">Proceed to Payment</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var form = this;
+            var amount = form.amount.value;
+
+            var options = {
+                "key": "rzp_test_edrzdb8Gbx5U5M", // Enter the Key ID generated from the Dashboard
+                "amount": amount * 100, // Amount is in currency subunits. Default is paise
+                "currency": "INR",
+                "name": "QR Dine",
+                "description": "Order Payment",
+                "order_id": "{{ razorpay_order_id }}", // This is a sample Order ID that you should replace with your generated order ID
+                "handler": function (response) {
+                    // This is where you handle the response after payment success
+                    alert('Payment Successful!');
+
+                    // You might want to send the payment response to your server
+                    var paymentData = {
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                        order_id: "{{ order.id }}", // The order ID you want to associate with this payment
+                    };
+
+                    // Send this paymentData to your server for further processing
+                    fetch('/your-server-endpoint-to-verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify(paymentData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // Redirect to success page or show success message
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+            var razorpay = new Razorpay(options);
+            razorpay.open();
+        });
+    </script>
+</body>
+
+
+
+</html>

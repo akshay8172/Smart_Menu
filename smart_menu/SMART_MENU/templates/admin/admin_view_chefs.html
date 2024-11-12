@@ -1,0 +1,25 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block title %}Chefs{% endblock %}
+
+{% block content %}
+<a href="{% url 'admin_add_new_chef' %}" class="btn btn-success" style="margin-left: 10px;">Add new Chef</a>
+<div class="container">
+    <h1 class="mb-4 text-center">List of Chefs</h1>
+    <div class="row">
+        {% for chef in chefs %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body text-center">
+                    <img src="{% static 'images/chef_image.png' %}" class="rounded-circle mb-3" alt="Chef Avatar" width="100" height="100">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">Name : {{ chef.username }}</p>
+                    <p class="card-text">Password : {{ chef.password }}</p>
+                    {% comment %} <a href="#" class="btn btn-primary">Edit Profile</a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

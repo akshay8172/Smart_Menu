@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block title %}Staffs{% endblock %}
+
+{% block content %}
+<a href="{% url 'admin_add_new_delivery_staff' %}" class="btn btn-success" style="margin-left: 10px;">Add new Chef</a>
+<div class="container">
+    <h1 class="mb-4 text-center">List of Staffs</h1>
+    <div class="row">
+        {% for i in staffs %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body text-center">
+                    <img src="{{i.photo.url}}" class="rounded-circle mb-3" alt="Chef Avatar" width="100" height="100">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">Name : {{ i.name|capfirst }}</p>
+                    <p class="card-text">Phone : {{ i.phone }}</p>
+                    <p class="card-text">Email : {{ i.email }}</p>
+                    <p class="card-text">Gender : {{ i.gender }}</p>
+                    <p class="card-text">Dob : {{ i.date_of_birth }}</p>
+                    <a href="{% url 'edit_delivery_staff' i.id %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

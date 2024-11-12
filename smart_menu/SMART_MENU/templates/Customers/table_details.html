@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="refresh" content="10">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a4e69;
+            --secondary-color: #9a8c98;
+            --accent-color: #c9ada7;
+            --background-color: #f2e9e4;
+            --text-color: #22223b;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--background-color) !important;
+        }
+        
+        .menu-item, .offer-item {
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #ffffff;
+        }
+        
+        .menu-item:hover, .offer-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-columns {
+            column-count: 1;
+        }
+        
+        @media (min-width: 768px) {
+            .card-columns {
+                column-count: 2;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .card-columns {
+                column-count: 3;
+            }
+        }
+        
+        .section-title {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        footer {
+            margin-top: 60px;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: var(--secondary-color);
+            color: var(--background-color);
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .btn-add-to-cart, .btn-buy-now {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* Dark mode styles */
+        body.dark-theme {
+            --primary-color: #6d597a;
+            --secondary-color: #b56576;
+            --accent-color: #e56b6f;
+            --background-color: #355070;
+            --text-color: #eaac8b;
+        }
+        
+        body.dark-theme .menu-item, 
+        body.dark-theme .offer-item {
+            background-color: #46647e;
+            color: var(--text-color);
+        }
+        
+        body.dark-theme .btn-light {
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
+        
+        body.dark-theme .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        /* Laptop-specific styles */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1140px;
+            }
+            
+            .menu-item, .offer-item {
+                display: flex;
+                flex-direction: row;
+            }
+            
+            .product-image {
+                width: 200px;
+                height: 200px;
+                margin-right: 20px;
+            }
+            
+            .product-details {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Qr Dine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/order_status/{{table.table_number}}"><i class="fas fa-utensils"></i> Order</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ratings/{{table.table_number}}"><i class="fas fa-history"></i> Ratings</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart/">
+                            <i class="fas fa-shopping-cart"></i> Cart 
+                        </a>
+                    </li>                    
+                </ul>
+                
+                <button class="theme-toggle ms-3" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h3 class="text-center fade-in">Table Number: {{ table.table_number }}</h3>
+    
+        <h4 class="section-title fade-in">Available Menu Items</h4>
+        <div class="card-columns">
+            {% if menu_items %}
+                {% for item in menu_items %}
+                    <div class="menu-item card fade-in" data-menu-item-id="{{ item.id }}">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
+                        <div class="product-details">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <p class="card-text"><strong>Price: ₹{{ item.price }}</strong></p>
+                            <button class="btn btn-primary btn-add-to-cart">Add to Cart</button>
+                            <form method="post" action="{% url 'buy_now' item.id table.table_number %}">
+                                {% csrf_token %}
+                                <button class="btn btn-success btn-buy-now" type="submit">Buy Now</button> 
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No menu items are available at the moment.</p>
+            {% endif %}
+        </div>
+    
+        <h4 class="section-title fade-in">Offers on Menu Items</h4>
+        <div class="card-columns">
+            {% if offers %}
+                {% for offer in offers %}
+                    <div class="offer-item card fade-in">
+                        <img src="{{ offer.menu_item.image.url }}" alt="{{ offer.menu_item.name }}" class="product-image">
+                        <div class="product-details">
+                            <h5 class="card-title">{{ offer.menu_item.name }} - <span class="text-success">Offer!</span></h5>
+                            <p class="card-text">Discount: <strong>{{ offer.discount_percentage }}%</strong></p>
+                            <p class="card-text"><strong>New Price: ₹{{ offer.price }}</strong></p>
+                            <!-- <button class="btn btn-primary btn-add-to-cart">Add to Cart</button> -->
+                            <form method="post" action="{% url 'buy_now' offer.menu_item.id table.table_number %}">
+                                {% csrf_token %}
+                                <button class="btn btn-success btn-buy-now" type="submit">Buy Now</button> 
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No offers available at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+
+    <footer class="footer text-center text-lg-start">
+        <div class="text-center p-3">
+            © 2024 Qr Dine. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Get CSRF Token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Add to Cart functionality
+        document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const menuItemId = this.closest('.menu-item').dataset.menuItemId; // Get the menu item ID
+                const tableNumber = '{{ table.table_number }}';  // Get the table number from the template
+
+                fetch('/add_to_cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // Ensure CSRF token is fetched correctly
+                    },
+                    body: JSON.stringify({ menu_item_id: menuItemId, table_number: tableNumber }) // Include table number
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const cartCountElement = document.getElementById('cart-count');
+                        if (cartCountElement) {
+                            cartCountElement.innerText = data.cart_count; // Update cart count
+                        }
+                        alert('Item added to cart!');
+                    } else {
+                        alert('Error adding item to cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    alert('Error adding item to cart: ' + error.message);
+                });
+            });
+        });
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+        }
+    </script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

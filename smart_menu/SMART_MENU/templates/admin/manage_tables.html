@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Manage Tables{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Manage Tables</h2>
+    <div class="mb-3 text-end">
+        <a href="{% url 'add_table' %}" class="btn btn-success">Add New Table</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Si.No</th>
+                <th>Table Number</th>
+                <th>QR Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for table in tables %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ table.table_number }}</td>
+                    <td><img src="{{ table.qr_code.url }}" alt="QR Code" width="100"></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

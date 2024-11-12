@@ -1,0 +1,81 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Offer{% endblock title %}
+{% block content %}
+
+<h2>Add Offer</h2>
+
+<form method="POST" action="{% url 'add_offer' %}" id="offerForm">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="menu_item">Menu Item:</label>
+        <select id="menu_item" name="menu_item" class="form-control">
+            {% for item in menu_items %}
+                <option value="{{ item.id }}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="offer_title">Offer Title:</label>
+        <input type="text" id="offer_title" name="offer_title" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="discount_percentage">Discount Percentage:</label>
+        <input type="number" id="discount_percentage" name="discount_percentage" step="0.01" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" class="form-control" required>
+        <small id="start_date_error" class="text-danger"></small>
+    </div>
+    <div class="form-group">
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" class="form-control" required>
+        <small id="end_date_error" class="text-danger"></small>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Offer</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    const startDateError = document.getElementById('start_date_error');
+    const endDateError = document.getElementById('end_date_error');
+    const form = document.getElementById('offerForm');
+
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    startDateInput.min = today;
+    endDateInput.min = today;
+
+    function validateDates() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        startDateError.textContent = '';
+        endDateError.textContent = '';
+
+        <!-- if (startDate < tomorrow) {
+            startDateError.textContent = 'Start date must be at least tomorrow.';
+        } -->
+
+        if (endDate <= startDate) {
+            endDateError.textContent = 'End date must be at least one day after the start date.';
+        }
+    }
+
+    startDateInput.addEventListener('change', validateDates);
+    endDateInput.addEventListener('change', validateDates);
+
+    form.addEventListener('submit', function(event) {
+        validateDates();
+        if (startDateError.textContent || endDateError.textContent) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
+
+{% endblock content %}

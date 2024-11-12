@@ -1,0 +1,72 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Delivery Staff Profile</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST" action="{% url 'edit_delivery_staff' staff.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ staff.name }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ staff.phone }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ staff.email }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="Male" {% if staff.gender == "Male" %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if staff.gender == "Female" %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if staff.gender == "Other" %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" name="dob" value="{{ staff.date_of_birth|date:'Y-m-d' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Profile Image</label>
+                    {% if staff.image %}
+                        <img src="{{ staff.image.url }}" alt="Current Profile Image" class="img-thumbnail mb-2" width="100">
+                    {% endif %}
+                    <input type="file" class="form-control" id="image" name="image">
+                </div>
+
+                
+
+                <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('.toggle-icon').forEach(function(eyeIcon) {
+        eyeIcon.addEventListener('click', function() {
+            const passwordInput = this.previousElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                this.innerHTML = '<i class="fa fa-eye"></i>';
+            }
+        });
+    });
+</script>
+{% endblock %}

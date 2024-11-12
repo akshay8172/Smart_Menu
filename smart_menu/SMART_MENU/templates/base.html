@@ -1,0 +1,353 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshness Restaurant</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand {
+            font-family: 'Lobster', cursive;
+            font-size: 1.8rem;
+            color: #f8c42d;
+        }
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-weight: 500;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #f8c42d;
+        }
+        .navbar .btn-link {
+            color: #fff;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .navbar .btn-link:hover {
+            color: #f8c42d;
+            text-decoration: underline;
+        }
+        .navbar .search-bar {
+            border-radius: 30px;
+            border: none;
+            padding-left: 15px;
+            padding: 8px 15px;
+            background-color: #fff;
+        }
+        .navbar .search-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+        .navbar .search-icon:hover {
+            color: #f8c42d;
+        }
+        .navbar .cart-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 20px;
+        }
+        .navbar .cart-icon:hover {
+            color: #f8c42d;
+        }
+        .navbar-toggler-icon {
+            color: #fff;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: url("{% static 'abg.jpg' %}"); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+        }
+
+     /* About Us Section */
+        .content-section {
+            padding: 50px 20px;
+            background-color: #fff; 
+        }
+
+        .content-section .container {
+            max-width: 1200px; 
+        }
+
+        /* Custom font styles for headings */
+        .content-section h2 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            color: #343a40;
+            font-size: 2.5rem; 
+            margin-bottom: 15px; 
+        }
+
+        /* Custom font styles for paragraph descriptions */
+        .content-section p {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 400;
+            font-size: 1.1rem;
+            line-height: 1.8; 
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        /* Image styles */
+        .content-section img {
+            max-width: 75%;
+            height: auto; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 0; 
+        }
+
+        /* Row adjustments */
+        .row.align-items-center {
+            margin-bottom: 40px; 
+        }
+        
+
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Center titles */
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Ensure all cards have the same height */
+.card {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Make card images cover the card's top area */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Add consistent height to cards */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+/* Carousel image styling */
+.carousel-inner img {
+    height: 500px;
+    object-fit: cover;
+}
+
+/* Fade effect for smoother transitions */
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.carousel-fade .carousel-item.active {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+/* Center carousel caption text */
+.carousel-caption {
+    bottom: 20%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.carousel-caption h5 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 1.25rem;
+}
+
+/* Carousel controls (previous and next buttons) */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+}
+/* Hero Section */
+.hero {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 100px 0;
+    text-align: center;
+    color: white;
+}
+
+/* Contact Info Icons */
+.contact-section .fa-phone, .contact-section .fa-envelope, .contact-section .fa-map-marker-alt {
+    color: #007bff;
+}
+
+.contact-section .col-md-4 h5 {
+    margin-top: 10px;
+    font-size: 1.25rem;
+}
+
+/* Contact Form Styling */
+.contact-section form {
+    margin-top: 40px;
+}
+
+.contact-section form .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 10px;
+}
+
+.contact-section form .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1.25rem;
+}
+
+.contact-section form .btn:hover {
+    background-color: #0056b3;
+}
+/* Login Container Styling */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('/static/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Login Box Styling */
+.login-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Login Title */
+.login-title {
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #007bff;
+    text-align: center;
+}
+
+/* Form Inputs */
+.form-control {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+/* Submit Button */
+.btn {
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+
+/* Forgot Password Link */
+.text-center a {
+    color: #007bff;
+    font-size: 1rem;
+}
+
+
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'logo (1).jpg' %}" alt="QR Dine Logo"> 
+            QR DINE
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav" style="margin-left:50px;">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'about' %}" class="nav-link">About Us</a> 
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'contact' %}" class="nav-link">Contact</a> 
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'login' %}" class="nav-link">Login</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   {% block body %}
+     
+   {% endblock body %}
+
+<!-- Footer -->
+<footer class="footer mt-5">
+    <div class="container">
+        <p>&copy; 2024 Freshness Restaurant. All rights reserved.</p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

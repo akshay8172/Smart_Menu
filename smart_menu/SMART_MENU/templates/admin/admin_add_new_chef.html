@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Add New Staff</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST" action="{% url 'admin_add_new_chef' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3 password-toggle">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <span class="toggle-icon"><i class="fa fa-eye"></i></span>
+                </div>
+                <div class="mb-3 password-toggle">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    <span class="toggle-icon"><i class="fa fa-eye"></i></span>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Add Staff</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Add this script block if it's not already included in your base.html -->
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('.toggle-icon').forEach(function(eyeIcon) {
+        eyeIcon.addEventListener('click', function() {
+            const passwordInput = this.previousElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                this.innerHTML = '<i class="fa fa-eye"></i>';
+            }
+        });
+    });
+</script>
+{% endblock %}
